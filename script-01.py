@@ -28,7 +28,7 @@ def to_binary(img, threshold=128):
         for j in xrange(len(img[i])):
             rgb = get_pixels(img, (i, j))
             avg = np.average(rgb)
-            if(avg > threshold):
+            if(avg < threshold):
                 set_pixels(img, (i, j), BLACK)
             else:
                 set_pixels(img, (i, j), WHITE)
