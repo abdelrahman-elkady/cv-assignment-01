@@ -25,7 +25,7 @@ def gen_three_by_three_mat(a, b, c, d, e, f, g, h, i):
     return '%d, %d, %d; %d, %d, %d; %d, %d, %d' % (a, b, c, d, e, f, g, h, i)
 
 
-def affineTransformation(img, pts):
+def affine_transformation(img, pts):
     pt1_src, pt2_src, pt3_src = pts
     height, width, channels = img.shape
 
@@ -64,7 +64,7 @@ def affineTransformation(img, pts):
 
 img = cv2.imread('./data/L3.jpg')
 
-res = affineTransformation(img, [(14, 14), (72, 464), (905, 681)])
+res = affine_transformation(img, [(14, 14), (72, 464), (905, 681)])
 
 cv2.imshow("Image", res)
 
