@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 
 def set_pixels(img, pos, rgb):
@@ -21,21 +22,33 @@ def get_pixels(img, pos):
     return r, g, b
 
 
-def change_brightness(img, factor=1.5):
-    for i in xrange(len(img)):
-        for j in xrange(len(img[i])):
-            r, g, b = get_pixels(img, (i, j))
-            r *= factor
-            g *= factor
-            b *= factor
-            set_pixels(img, (i, j), [r, g, b])
+def blend(img_a, img_b, ratio = 0.8):
+    height, width, channels = img_a.shape
+    dest_img = np.zeros((height, width,channels), np.uint8)
 
+    b = 1 - ratio
+
+    for i in xrange(len(img_a)):
+        for j in xrange(len(img_a[i])):
+
+            rgb_a = get_pixels(img_a, (i,j))
+            rgb_b = get_pixels(img_b, (i,j))
+
+            rgb_a = map(lambda p: p * ratio, rgb_a)
+            rgb_b = map(lambda p: p * b, rgb_b)
+            rgb_final = [sum(elem) for elem in zip(rgb_a,rgb_b)]
+
+            set_pixels(dest_img, (i,j), rgb_final)
+
+    return dest_img
 
 img = cv2.imread('./data/L2.jpg')
-img_before = cv2.imread('./data/L2.jpg')
-change_brightness(img)
+logo = cv2.imread('./data/logo.jpg')
+height, width, _ = img.shape
+logo_resized = cv2.resize(logo,(width, height) )
 
-cv2.imshow("Image-Before", img_before)
-cv2.imshow("Image", img)
+res = blend(img, logo_resized)
+
+cv2.imshow("Image", res)
 
 cv2.waitKey(0)
